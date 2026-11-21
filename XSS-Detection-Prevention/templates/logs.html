@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Detection Logs | SecureScan</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b1220;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+
+        nav {
+            background: #111c30;
+            border-bottom: 1px solid #26364f;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #a9b8cc;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #38bdf8;
+        }
+
+        /* Main */
+
+        .container {
+            max-width: 1200px;
+            margin: 55px auto;
+            padding: 0 25px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* Log Card */
+
+        .logs-card {
+            background: #111c30;
+            border: 1px solid #26364f;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .logs-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .logs-top h2 {
+            font-size: 19px;
+            color: white;
+        }
+
+        .record-count {
+            background: #172e50;
+            color: #38bdf8;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Search and Filter */
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .filters input,
+        .filters select {
+            background: #0b1220;
+            border: 1px solid #33445e;
+            border-radius: 7px;
+            padding: 12px;
+            color: #e2e8f0;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .filters input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filters select {
+            min-width: 170px;
+        }
+
+        .filters input:focus,
+        .filters select:focus {
+            border-color: #38bdf8;
+        }
+
+        /* Table */
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 850px;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #17253c;
+            color: #94a3b8;
+            padding: 15px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #26364f;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        tbody tr:hover {
+            background: #17253c;
+        }
+
+        .input-cell {
+            max-width: 230px;
+            overflow-wrap: anywhere;
+        }
+
+        /* Status Badges */
+
+        .badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .safe {
+            background: #123a2b;
+            color: #4ade80;
+        }
+
+        .detected {
+            background: #451f27;
+            color: #f87171;
+        }
+
+        .xss {
+            background: #472c18;
+            color: #fb923c;
+        }
+
+        .sql {
+            background: #451f27;
+            color: #f87171;
+        }
+
+        .both {
+            background: #382451;
+            color: #c084fc;
+        }
+
+        .neutral {
+            background: #273449;
+            color: #cbd5e1;
+        }
+
+        /* Empty State */
+
+        .empty {
+            text-align: center;
+            padding: 45px 15px;
+            color: #94a3b8;
+        }
+
+        .empty h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 60px;
+            border-top: 1px solid #26364f;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media(max-width: 650px) {
+            nav {
+                padding: 18px 5%;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                margin-top: 35px;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            .logs-card {
+                padding: 15px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav>
+
+        <div class="logo">
+            Secure<span>Scan</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logs" class="active">Detection Logs</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <main class="container">
+
+        <section class="header">
+
+            <h1>Security Detection Logs</h1>
+
+            <p>
+                Monitor and review recorded XSS and SQL Injection
+                detection activities.
+            </p>
+
+        </section>
+
+
+        <!-- Logs Table -->
+
+        <section class="logs-card">
+
+            <div class="logs-top">
+
+                <h2>Detection Activity</h2>
+
+                <span class="record-count">
+                    Total Records: {{ records|length }}
+                </span>
+
+            </div>
+
+
+            <!-- Search and Filter -->
+
+            <div class="filters">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search submitted input or attack type..."
+                >
+
+                <select id="attackFilter">
+
+                    <option value="all">All Attack Types</option>
+                    <option value="safe">Safe</option>
+                    <option value="xss">XSS</option>
+                    <option value="sql">SQL Injection</option>
+                    <option value="both">Both Attacks</option>
+
+                </select>
+
+            </div>
+
+
+            {% if records %}
+
+            <div class="table-wrapper">
+
+                <table id="logsTable">
+
+                    <thead>
+
+                        <tr>
+                            <th>ID</th>
+                            <th>Submitted Input</th>
+                            <th>Attack Type</th>
+                            <th>XSS Status</th>
+                            <th>SQL Status</th>
+                            <th>Date and Time</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for record in records %}
+
+                        <tr>
+
+                            <td>{{ record['id'] }}</td>
+
+                            <td class="input-cell">
+                                {{ record['submitted_input'] }}
+                            </td>
+
+                            <td>
+                                {% if record['attack_type'] == 'Safe' %}
+
+                                    <span class="badge safe">
+                                        Safe
+                                    </span>
+
+                                {% elif record['attack_type'] == 'XSS' %}
+
+                                    <span class="badge xss">
+                                        XSS
+                                    </span>
+
+                                {% elif record['attack_type'] == 'SQL Injection' %}
+
+                                    <span class="badge sql">
+                                        SQL Injection
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge both">
+                                        Both Attacks
+                                    </span>
+
+                                {% endif %}
+                            </td>
+
+                            <td>
+
+                                {% if record['xss_detected'] %}
+
+                                    <span class="badge detected">
+                                        Detected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge safe">
+                                        Not Detected
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if record['sql_detected'] %}
+
+                                    <span class="badge detected">
+                                        Detected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge safe">
+                                        Not Detected
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                {{ record['timestamp'] }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="empty" id="noResults" style="display:none;">
+                <h3>No matching records found</h3>
+                <p>Try another search term or attack filter.</p>
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                <h3>No Detection Records Yet</h3>
+
+                <p>
+                    Submit an input through the security scanner
+                    to generate your first detection record.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>SecureScan | Security Monitoring System</p>
+
+        <p style="margin-top:7px;">
+            Built with Python, Flask and SQLite
+        </p>
+
+    </footer>
+
+
+    <!-- Search and Filter Script -->
+
+    <script>
+
+        const searchInput = document.getElementById("searchInput");
+        const attackFilter = document.getElementById("attackFilter");
+        const table = document.getElementById("logsTable");
+        const noResults = document.getElementById("noResults");
+
+        function filterLogs() {
+
+            if (!table) return;
+
+            const searchValue = searchInput.value.toLowerCase();
+            const filterValue = attackFilter.value;
+
+            const rows = table.querySelectorAll("tbody tr");
+
+            let visibleCount = 0;
+
+            rows.forEach(function(row) {
+
+                const text = row.textContent.toLowerCase();
+                const attackType = row.cells[2].textContent.toLowerCase();
+
+                let matchesSearch = text.includes(searchValue);
+
+                let matchesFilter = true;
+
+                if (filterValue === "safe") {
+                    matchesFilter = attackType.includes("safe");
+                }
+
+                else if (filterValue === "xss") {
+                    matchesFilter = attackType.includes("xss");
+                }
+
+                else if (filterValue === "sql") {
+                    matchesFilter = attackType.includes("sql injection");
+                }
+
+                else if (filterValue === "both") {
+                    matchesFilter = attackType.includes("both attacks");
+                }
+
+                if (matchesSearch && matchesFilter) {
+
+                    row.style.display = "";
+                    visibleCount++;
+
+                } else {
+
+                    row.style.display = "none";
+
+                }
+
+            });
+
+            if (noResults) {
+                noResults.style.display =
+                    visibleCount === 0 ? "block" : "none";
+            }
+
+        }
+
+        if (searchInput && attackFilter) {
+
+            searchInput.addEventListener("input", filterLogs);
+
+            attackFilter.addEventListener("change", filterLogs);
+
+        }
+
+    </script>
+
+</body>
+</html>

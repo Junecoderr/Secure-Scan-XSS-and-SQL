@@ -1,0 +1,140 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1120;
+    color: white;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 60px auto;
+}
+
+h1 {
+    color: #38bdf8;
+}
+
+.card {
+    background: #172033;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 25px;
+}
+
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    height: 130px;
+    padding: 12px;
+    background: #0b1120;
+    color: white;
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+button {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+button:hover {
+    background: #0369a1;
+}
+
+a {
+    color: #38bdf8;
+}
+/* Security Results UI */
+
+.result-section {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.result-section h3,
+.input-section h3 {
+    color: #ffffff;
+    margin-bottom: 15px;
+}
+
+.result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    margin: 12px 0;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.danger {
+    background: rgba(255, 60, 60, 0.15);
+    border: 1px solid #ff4d4d;
+    color: #ff6969;
+}
+
+.safe {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid #22c55e;
+    color: #4ade80;
+}
+
+.overall-status {
+    margin-top: 25px;
+    padding: 20px;
+    background: #1e293b;
+    border-radius: 12px;
+}
+
+.danger-text {
+    color: #ff5252;
+}
+
+.safe-text {
+    color: #4ade80;
+}
+
+.input-section {
+    margin-top: 25px;
+    text-align: left;
+}
+
+.input-section pre {
+    background: #111827;
+    color: #e2e8f0;
+    padding: 18px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.back-button {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 13px 25px;
+    background: #06b6d4;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.back-button:hover {
+    background: #0891b2;
+}
+
+.subtitle {
+    color: #94a3b8;
+}
+
+.footer {
+    margin-top: 30px;
+    color: #64748b;
+    font-size: 13px;
+}

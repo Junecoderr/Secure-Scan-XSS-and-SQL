@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Scan Results</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+    <div class="card">
+
+        <h1>Security Scan Results</h1>
+
+        <p class="subtitle">
+            XSS & SQL Injection Detection System
+        </p>
+
+        <div class="result-section">
+
+            <h3>Detection Summary</h3>
+
+            <!-- XSS Detection -->
+            <div class="result {{ 'danger' if xss_detected else 'safe' }}">
+                <span>XSS Attack</span>
+
+                <strong>
+                    {{ "DETECTED" if xss_detected else "NOT DETECTED" }}
+                </strong>
+            </div>
+
+            <!-- SQL Injection Detection -->
+            <div class="result {{ 'danger' if sql_detected else 'safe' }}">
+                <span>SQL Injection</span>
+
+                <strong>
+                    {{ "DETECTED" if sql_detected else "NOT DETECTED" }}
+                </strong>
+            </div>
+
+        </div>
+
+        <!-- Overall Detection Status -->
+        <div class="overall-status">
+
+            {% if xss_detected or sql_detected %}
+
+                <h2 class="danger-text">
+                    Suspicious Input Detected!
+                </h2>
+
+                <p>
+                    One or more attack patterns were identified.
+                </p>
+
+            {% else %}
+
+                <h2 class="safe-text">
+                    Input Appears Safe
+                </h2>
+
+                <p>
+                    No known suspicious patterns were detected.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Submitted Input -->
+        <div class="input-section">
+
+            <h3>Submitted Input</h3>
+
+            <pre>{{ user_input }}</pre>
+
+        </div>
+
+        <a href="/" class="back-button">
+            Test Another Input
+        </a>
+
+        <p class="footer">
+            Cybersecurity Detection Lab
+        </p>
+
+    </div>
+</div>
+
+</body>
+</html>

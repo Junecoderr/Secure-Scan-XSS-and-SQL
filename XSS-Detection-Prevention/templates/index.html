@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SecureScan | Cybersecurity Detection System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #0b1220;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+
+        nav {
+            height: 75px;
+            background: #111c30;
+            border-bottom: 1px solid #26364f;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1d4ed8;
+            border-radius: 9px;
+            font-size: 19px;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #a9b8cc;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #38bdf8;
+        }
+
+        /* Main Container */
+
+        .container {
+            max-width: 1100px;
+            margin: 65px auto;
+            padding: 0 25px;
+        }
+
+        /* Hero Section */
+
+        .hero {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .system-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: #102a2a;
+            color: #4ade80;
+            border: 1px solid #1e4840;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 22px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            color: #ffffff;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 span {
+            color: #38bdf8;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: auto;
+            color: #94a3b8;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        /* Scanner Card */
+
+        .scanner-card {
+            max-width: 800px;
+            margin: auto;
+            background: #111c30;
+            border: 1px solid #26364f;
+            border-radius: 14px;
+            padding: 35px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .scanner-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .scanner-icon {
+            width: 46px;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #172e50;
+            color: #38bdf8;
+            border-radius: 10px;
+            font-size: 22px;
+        }
+
+        .scanner-header h2 {
+            font-size: 21px;
+            color: #ffffff;
+        }
+
+        .scanner-header p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .description {
+            color: #94a3b8;
+            font-size: 14px;
+            margin: 20px 0 25px;
+            line-height: 1.7;
+        }
+
+        label {
+            display: block;
+            color: #e2e8f0;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 160px;
+            background: #0b1220;
+            border: 1px solid #33445e;
+            border-radius: 9px;
+            padding: 17px;
+            color: #e2e8f0;
+            font-family: Consolas, monospace;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #64748b;
+        }
+
+        .input-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 9px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        /* Scan Button */
+
+        .scan-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .scan-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .scan-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Detection Modules */
+
+        .section-heading {
+            color: #ffffff;
+            font-size: 20px;
+            margin: 45px 0 20px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: #111c30;
+            border: 1px solid #26364f;
+            border-radius: 11px;
+            padding: 25px;
+            transition: 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: #2563eb;
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #172e50;
+            color: #38bdf8;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 17px;
+        }
+
+        .feature-card h3 {
+            color: #ffffff;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+
+        footer {
+            text-align: center;
+            padding: 30px 15px;
+            margin-top: 70px;
+            background: #111c30;
+            border-top: 1px solid #26364f;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 650px) {
+
+            nav {
+                height: auto;
+                min-height: 70px;
+                padding: 15px 5%;
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 29px;
+            }
+
+            .scanner-card {
+                padding: 22px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                margin-top: 40px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+
+    <nav>
+
+        <div class="logo">
+            <div class="logo-icon">🛡</div>
+            Secure<span>Scan</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/" class="active">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logs">Detection Logs</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+
+    <main class="container">
+
+        <section class="hero">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                SECURITY ANALYSIS SYSTEM
+            </div>
+
+            <h1>
+                Web Application
+                <span>Security Scanner</span>
+            </h1>
+
+            <p>
+                Analyze submitted input for potential Cross-Site
+                Scripting (XSS) and SQL Injection attacks using
+                predefined security detection rules.
+            </p>
+
+        </section>
+
+
+        <!-- Scanner Panel -->
+
+        <section class="scanner-card">
+
+            <div class="scanner-header">
+
+                <div class="scanner-icon">⌕</div>
+
+                <div>
+                    <h2>Vulnerability Detection</h2>
+                    <p>Input Analysis Module</p>
+                </div>
+
+            </div>
+
+            <p class="description">
+                Enter a string or test payload below. The system
+                will analyze the input and identify suspicious
+                patterns associated with common web attacks.
+            </p>
+
+            <form action="/test" method="POST" id="scanForm">
+
+                <label for="user_input">
+                    Input for Security Analysis
+                </label>
+
+                <textarea
+                    id="user_input"
+                    name="user_input"
+                    placeholder="Enter your input or test payload here..."
+                    required
+                    maxlength="10000"
+                ></textarea>
+
+                <div class="input-info">
+                    <span>Supported analysis: XSS and SQL Injection</span>
+                    <span id="charCount">0 / 10000</span>
+                </div>
+
+                <button
+                    type="submit"
+                    class="scan-button"
+                    id="scanButton"
+                >
+                    Analyze Input →
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Detection Modules -->
+
+        <h2 class="section-heading">Detection Modules</h2>
+
+        <section class="features">
+
+            <div class="feature-card">
+
+                <div class="feature-icon">XSS</div>
+
+                <h3>Cross-Site Scripting</h3>
+
+                <p>
+                    Detects suspicious HTML and JavaScript
+                    patterns commonly associated with
+                    Cross-Site Scripting vulnerabilities.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">SQL</div>
+
+                <h3>SQL Injection</h3>
+
+                <p>
+                    Identifies suspicious SQL statements,
+                    database commands, and injection patterns
+                    using predefined detection rules.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+            SecureScan | Web Application Security Project
+        </p>
+
+        <p>
+            Developed using Python, Flask, SQLite, HTML and CSS
+        </p>
+
+        <p>
+            Educational cybersecurity detection prototype
+        </p>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+
+    <script>
+
+        const form = document.getElementById("scanForm");
+        const input = document.getElementById("user_input");
+        const button = document.getElementById("scanButton");
+        const charCount = document.getElementById("charCount");
+
+        // Character counter
+
+        input.addEventListener("input", function() {
+
+            charCount.textContent =
+                input.value.length + " / 10000";
+
+        });
+
+        // Form validation and button feedback
+
+        form.addEventListener("submit", function(event) {
+
+            if (!input.value.trim()) {
+
+                event.preventDefault();
+
+                alert("Please enter input before starting the scan.");
+
+                return;
+
+            }
+
+            button.disabled = true;
+            button.textContent = "Analyzing Input...";
+
+        });
+
+    </script>
+
+</body>
+</html>

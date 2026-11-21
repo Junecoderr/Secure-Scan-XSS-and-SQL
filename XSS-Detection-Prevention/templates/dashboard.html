@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        body {
+            background: #101827;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .dashboard {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h1 {
+            color: #38bdf8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .stat-card h3 {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+
+        .stat-card p {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .safe-number { color: #22c55e; }
+        .xss-number { color: #f97316; }
+        .sql-number { color: #ef4444; }
+
+        .activity {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            color: #38bdf8;
+        }
+
+        .safe-status { color: #22c55e; }
+        .attack-status { color: #ef4444; }
+
+        .navigation {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .navigation a {
+            background: #0284c7;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 7px;
+            text-decoration: none;
+        }
+
+        .navigation a:hover {
+            background: #0369a1;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <div class="dashboard-header">
+        <h1>🛡 Security Dashboard</h1>
+        <p>Overview of XSS and SQL Injection detection activity</p>
+    </div>
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <h3>Total Scans</h3>
+            <p>{{ total_scans }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Safe Inputs</h3>
+            <p class="safe-number">{{ safe_scans }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>XSS Detected</h3>
+            <p class="xss-number">{{ xss_count }}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>SQL Injection Detected</h3>
+            <p class="sql-number">{{ sql_count }}</p>
+        </div>
+
+    </div>
+
+    <div class="activity">
+        <h2>Recent Activity</h2>
+
+        {% if recent_records %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Submitted Input</th>
+                    <th>Attack Type</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for record in recent_records %}
+                <tr>
+                    <td>{{ record['id'] }}</td>
+                    <td>{{ record['submitted_input'] }}</td>
+                    <td>
+                        {% if record['attack_type'] == 'Safe' %}
+                            <span class="safe-status">Safe</span>
+                        {% else %}
+                            <span class="attack-status">
+                                {{ record['attack_type'] }}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>{{ record['timestamp'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>No detection activity yet. Submit an input to begin.</p>
+        {% endif %}
+    </div>
+
+    <div class="navigation">
+        <a href="/">Home</a>
+        <a href="/logs">View Detection Logs</a>
+    </div>
+
+</div>
+
+</body>
+</html>
